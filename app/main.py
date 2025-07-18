@@ -1,26 +1,39 @@
-from fastapi import FastAPI, Depends
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
+from fastapi import FastAPI, Depends, Body, File, UploadFile
+from fastapi.responses import FileResponse
+
+from typing import Union, Annotated
+
+from contextlib import asynccontextmanager
+
+from database import delete_tables, create_tables
+from router import router as users_routers
 
 
-import uvicorn
 
 
-DB_URL = "sqlite+aiosqlite:///mydb.db"
-
-engine = create_async_engine(DB_URL)
-AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False)
-
-async def get_db():
-    async with AsyncSessionLocal() as session:
-        yield session
-
-app = FastAPI()
-
-@app.get("/home")
-async def home():
-    return {"Helo it is Home page"}
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await delete_tables()
+    print("Base ready!")
+    await create_tables()    
+    print("Base ready!")
+    yield
+    print("off app")       
 
 
-if __name__ == "__main__":
-    
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+app=FastAPI(lifespan=lifespan)
+app.include_router(users_routers)
+
+@app.post("/")
+async def add_file(uploaded_file:UploadFile):
+    file = uploaded_file.file
+    filename = uploaded_file.filename
+    headers = uploaded_file.headers
+    print(filename)
+    print(headers)
+    with open(filename, "wb") as f:
+        f.write(file.read())
+
+@app.get("/{filename}")
+async def get_file(filename:str):
+    return FileResponse(filename)
