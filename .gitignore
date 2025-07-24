@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 
 # Virtual environments
+.env
 .env/
 .venv/
 venv/
@@ -26,8 +27,11 @@ alembic/versions/
 # Docker
 *.dockerignore
 docker-compose.override.yml
+dockerfile
+
 
 # IDEs and editors
 .vscode/
 .idea/
 *.sw?
+to_uninstall.txt
