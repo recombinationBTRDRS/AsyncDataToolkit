@@ -11,17 +11,17 @@ from router import router as users_routers
 
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    await delete_tables()
-    print("Base ready!")
-    await create_tables()    
-    print("Base ready!")
-    yield
-    print("off app")       
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     await delete_tables()
+#     print("Base ready!")
+#     await create_tables()    
+#     print("Base ready!")
+#     yield
+#     print("off app")       
 
 
-app=FastAPI(lifespan=lifespan)
+app=FastAPI()
 app.include_router(users_routers)
 
 @app.post("/")
