@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.env
+.venv/
+venv/
+env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Migrations
+migrations/
+alembic/versions/
+
+# Docker
+*.dockerignore
+docker-compose.override.yml
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sw?
